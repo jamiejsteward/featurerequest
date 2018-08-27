@@ -1,5 +1,7 @@
 # Feature Request App
 
+[<img src="static/screenshot.png" width="100%" />](http://flask-env.ixduwmwhpm.us-east-2.elasticbeanstalk.com/).
+
 ## Functionality
 A "feature request" is a request for a new feature that will be added onto an existing piece of
 software. Assume that the user is an employee who would be entering this information after
@@ -45,6 +47,7 @@ python application.py
 
 Look for the line 'Running on [localhost url]'. Navigate to this url, by default its [http://127.0.0.1:5000/](http://127.0.0.1:5000/).
 
-<img src="static/me-profile.png" width="70px"> 
+<img src="static/me-profile.png" width="70px" />
+
 [Jamie Steward](https://www.linkedin.com/in/jamiesteward/)
 
