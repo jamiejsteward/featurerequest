@@ -1,4 +1,4 @@
-### Feature Request App
+# Feature Request App
 
 ## Functionality
 A "feature request" is a request for a new feature that will be added onto an existing piece of
