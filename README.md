@@ -45,5 +45,6 @@ python application.py
 
 Look for the line 'Running on [localhost url]'. Navigate to this url, by default its [http://127.0.0.1:5000/](http://127.0.0.1:5000/).
 
-<img src="static/me-profile.png"> [Jamie Steward](https://www.linkedin.com/in/jamiesteward/)
+<img src="static/me-profile.png" width="70px"> 
+[Jamie Steward](https://www.linkedin.com/in/jamiesteward/)
 
