@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" integrity="sha384-3AB7yXWz4OeoZcPbieVW64vVXEwADiYyAEhwilzWsLw+9FgqpyjjStpPnpBO8o8S" crossorigin="anonymous">
+    <!-- TODO
+   <link href="/assets/formvalidation/dist/css/formValidation.min.css" rel="stylesheet">
+    -->
+
+
+    <link href="../static/style.css" rel="stylesheet">
+
+    <title>Feature Request App</title>
+
+  </head>
+  <body>
+    <nav class="navbar navbar-expand navbar-dark bg-dark fixed-top">
+      <a class="navbar-brand" href="#"><img src="static/logo.png" width="120px"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample02" aria-controls="navbarsExample02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExample02">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Suggestions <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">News & Updates</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Employee Benefits</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Time & Vacation</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Training</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Help</a>
+          </li>
+        </ul>
+        <form class="form-inline my-2 my-md-0">
+          <input class="form-control" type="text" placeholder="Search">
+        </form>
+      </div>
+    </nav>
+
+    <main role="main" class="container body" id="featureList">
+
+      <!-- list section -->
+      <div class="row" id="listFeatures">
+        <div class="col-12">
+            <h3 class="py-4">Submitted Features</h3>
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Title</th>
+                  <th scope="col">Client</th>
+                  <th scope="col">Priority</th>
+                  <th scope="col">Target Date</th>
+                  <th scope="col">Product Area</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody data-bind="foreach: features, visible: features().length > 0">
+                  <tr>
+                    <td><span data-bind="text: title" /><br><small data-bind="text: description" /></td>
+                    <td>Client <span data-bind="text: client" /></td> 
+                    <td><span data-bind="text: priority" /></td>
+                    <td><span data-bind="text: target" /></td>
+                    <td><span data-bind="text: area" /></td>
+                    <td><a class="clickable-icon" data-bind="click: function(data, event) { delete($parent.id, data, event) }"><i class="fas fa-trash-alt"></i></a></td>
+                  </tr>
+              </tbody>
+            </table>
+            <div class="py-4" data-bind="visible: features().length = 0">No feature has been submitted yet. Head over to Add New to submit one.</div>
+            <div class="form-group row">
+              <div class="col-sm-12">
+                <button id="addButton" type="button" class="btn btn-primary">Suggest New Feature</button>
+              </div>
+            </div>
+        </div>
+      </div>
+
+      <!-- create section -->
+      <div class="row" id="createFeature" style="display:none">
+        <div class="col-12">
+          <h3 class="py-4">Suggest New Feature</h3>
+            <form data-bind="submit: create">
+              <div class="form-group row">
+                <label for="inputTitle" class="col-sm-2 col-form-label">Title *</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="inputTitle" placeholder="Feature Name" name="title" data-bind="value: title" required>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputDescription" class="col-sm-2 col-form-label">Description</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="inputDescription" placeholder="Feature Description" name="description" data-bind="value: description">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="client" class="col-sm-2 col-form-label">Client *</label>
+                <div class="col-sm-10">
+                  <select class="form-control" id="client" name="client" data-bind="
+                    options: clientValues,
+                    optionsText: 'name',
+                    optionsValue: 'id',
+                    value: selectedClient">
+                  </select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputPriority" class="col-sm-2 col-form-label">Priority *</label>
+                <div class="col-sm-10">
+                  <input type="number" min="1" class="form-control" id="inputPriority" placeholder="Priority" name="priority" data-bind="value: priority">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputTargetDate" class="col-sm-2 col-form-label">Target Date *</label>
+                <div class="col-sm-10">
+                  <input type="date" class="form-control" id="inputTargetDate" name="target" data-bind="value: target">
+                  <div id="inputTargetDateFeedback" class="invalid-feedback">
+                    Date has to be in the future.
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="productArea" class="col-sm-2 col-form-label">Product Area *</label>
+                <div class="col-sm-10">
+                  <select class="form-control" id="productArea" name="area" data-bind="
+                    options: areaValues,
+                    optionsText: 'name',
+                    optionsValue: 'id',
+                    value: selectedArea">
+                  </select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-12">
+                  <button id="saveButton" type="submit" class="btn btn-primary">Save Suggestion</button>
+                </div>
+              </div>
+            </form>
+        </div>
+      </div>
+
+    </main>
+
+    <footer role="contentinfo" class="footer">
+      <div class="navbar navbar-default navbar-fixed-bottom">
+          <ul class="nav navbar-nav navbar-right"></ul>
+          <div class="navbar-text pull-right">
+            <a href="https://www.linkedin.com/in/jamiesteward/" class="nav-link">
+            Jamie Steward
+            <span><img src="static/me-profile.png" width="70px"></span>
+            </a>
+          </div>
+      </div>
+    </footer>
+ 
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js" crossorigin="anonymous"></script> 
+    <script src="{{url_for('static', filename='moment.min.js')}}"></script>
+    <script src="{{url_for('static', filename='main.js')}}"></script>
+  </body>
+</html>
