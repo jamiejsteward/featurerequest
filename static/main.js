@@ -1,4 +1,12 @@
 function Feature(data) {
+    this.id = data.id;
+    this.title = data.title;
+    this.description = data.description;
+    this.client = data.client;
+    this.area = data.product_area;
+    this.priority = data.priority;
+    this.target = data.target_date;
+    /*
     this.id = ko.observable(data.id);
     this.title = ko.observable(data.title);
     this.description = ko.observable(data.description);
@@ -6,6 +14,7 @@ function Feature(data) {
     this.area = ko.observable(data.product_area);
     this.priority = ko.observable(data.priority);
     this.target = ko.observable(data.target_date);
+    */
 }
 
 var featureModel = {
@@ -48,9 +57,9 @@ var featureModel = {
             }
         }
     },
-    delete: function(id, data, event) {
+    delete: function(data) {
         $.ajax({
-            url: '/features/'+ id,
+            url: '/features/'+ data.id,
             type: 'DELETE',
             success: function(response) {
                 window.location = "/";

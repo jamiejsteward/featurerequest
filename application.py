@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 ## Comment out the line below if you want to work with a RDS account. Keep it as is for a local DB.
-#SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/test2.db'
+SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/test2.db'
 
 ## Edit the URI below to add your MySQL database RDS credentials and your AWS URL
 ## SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://(user):(password)@(db_endpoint)/(db_name)'

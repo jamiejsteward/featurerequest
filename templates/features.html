@@ -76,7 +76,8 @@
                     <td><span data-bind="text: priority" /></td>
                     <td><span data-bind="text: target" /></td>
                     <td><span data-bind="text: area" /></td>
-                    <td><a class="clickable-icon" data-bind="click: function(data, event) { delete($parent.id, data, event) }"><i class="fas fa-trash-alt"></i></a></td>
+                    <td><a class="clickable-icon" data-bind="click: $parent.delete"><i class="fas fa-trash-alt"></i></a></td>
+                    <!-- click: $parent.delete.bind(this, $data.id) -->
                   </tr>
               </tbody>
             </table>
