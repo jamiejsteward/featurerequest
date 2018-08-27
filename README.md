@@ -38,7 +38,7 @@ By default the app uses SQLlite locally, you can update the **SQLALCHEMY_DATABAS
 The easiest way to deploy on AWS is to install [Elastic Beanstalk Command Line Interface](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install.html).
 
 ```
-git clone TODO
+git clone git@github.com:jamiejsteward/featurerequest.git
 pip install -r requirements.txt
 python application.py
 ```
