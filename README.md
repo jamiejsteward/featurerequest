@@ -33,11 +33,9 @@ This project was built using the following technologies:
 
 To view the working application click here: [Feature Request App](http://flask-env.ixduwmwhpm.us-east-2.elasticbeanstalk.com/).
 
-These instructions will give you a local repository on your machine which you can then run and use. These steps assumes you have pip installed already.
+These instructions will give you a local repository on your machine which you can then run and use. It assumes you have pip installed already.
 
 By default the app uses SQLlite locally, you can update the **SQLALCHEMY_DATABASE_URI** variable to point at your MySQL database.
-
-The easiest way to deploy on AWS is to install [Elastic Beanstalk Command Line Interface](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install.html).
 
 ```
 git clone git@github.com:jamiejsteward/featurerequest.git
@@ -46,6 +44,20 @@ python application.py
 ```
 
 Look for the line 'Running on [localhost url]'. Navigate to this url, by default its [http://127.0.0.1:5000/](http://127.0.0.1:5000/).
+
+Unit tests launch a Flask shell and tests specific HTTP endpoints.
+
+```
+python test.py
+```
+
+The easiest way to deploy on AWS is to install [Elastic Beanstalk Command Line Interface](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install.html).
+
+```
+eb init --profile <name>
+eb deploy
+```
+
 
 <img src="static/me-profile.png" width="70px" />
 

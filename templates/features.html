@@ -8,10 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" integrity="sha384-3AB7yXWz4OeoZcPbieVW64vVXEwADiYyAEhwilzWsLw+9FgqpyjjStpPnpBO8o8S" crossorigin="anonymous">
-    <!-- TODO
-   <link href="/assets/formvalidation/dist/css/formValidation.min.css" rel="stylesheet">
-    -->
-
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.18/css/jquery.dataTables.min.css" integrity="sha384-1UXhfqyOyO+W+XsGhiIFwwD3hsaHRz2XDGMle3b8bXPH5+cMsXVShDoHA3AH/y/p" crossorigin="anonymous">
 
     <link href="../static/style.css" rel="stylesheet">
 
@@ -54,11 +51,27 @@
 
     <main role="main" class="container body" id="featureList">
 
+      <!-- Alerts section -->
+      <div class="row" id="alertFeatures">
+      <div id="alertWarning" class="alert alert-warning alert-dismissible fade show" role="alert" style="display:none">
+        <b id="alertWarningText">Failed to save changes.</b>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="alertSuccess" class="alert alert-success alert-dismissible fade show" role="alert" style="display:none">
+        <b id="alertSuccessText">Succesfully saved changes.</b>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+
       <!-- list section -->
       <div class="row" id="listFeatures">
         <div class="col-12">
             <h3 class="py-4">Submitted Features</h3>
-            <table class="table table-hover">
+            <table id="featuresTable" class="table table-hover table-striped table-bordered table-sm">
               <thead>
                 <tr>
                   <th scope="col">Title</th>
@@ -69,32 +82,38 @@
                   <th scope="col"></th>
                 </tr>
               </thead>
-              <tbody data-bind="foreach: features, visible: features().length > 0">
+              <tbody >
+                <!-- data-bind="foreach: features, visible: features().length > 0" -->
+
+                <!-- ko foreach: features -->
                   <tr>
                     <td><span data-bind="text: title" /><br><small data-bind="text: description" /></td>
                     <td>Client <span data-bind="text: client" /></td> 
                     <td><span data-bind="text: priority" /></td>
                     <td><span data-bind="text: target" /></td>
                     <td><span data-bind="text: area" /></td>
-                    <td><a class="clickable-icon" data-bind="click: $parent.delete"><i class="fas fa-trash-alt"></i></a></td>
-                    <!-- click: $parent.delete.bind(this, $data.id) -->
+                    <td>
+                      <a class="clickable-icon" data-bind="click: $parent.edit"><i class="fas fa-edit"></i></a>
+                      <a class="clickable-icon" data-bind="click: $parent.delete"><i class="fas fa-trash-alt"></i></a>
+                    </td>
                   </tr>
+                <!-- /ko -->
               </tbody>
             </table>
-            <div class="py-4" data-bind="visible: features().length = 0">No feature has been submitted yet. Head over to Add New to submit one.</div>
+            <div class="py-4" data-bind="visible: features().length = 0">No features have been submitted yet. </div>
             <div class="form-group row">
               <div class="col-sm-12">
-                <button id="addButton" type="button" class="btn btn-primary">Suggest New Feature</button>
+                <button id="addButton" type="button" class="btn btn-primary" data-bind="click: show">Suggest New Feature</button>
               </div>
             </div>
         </div>
       </div>
 
-      <!-- create section -->
-      <div class="row" id="createFeature" style="display:none">
+      <!-- edit section -->
+      <div class="row" id="editFeature" style="display:none">
         <div class="col-12">
-          <h3 class="py-4">Suggest New Feature</h3>
-            <form data-bind="submit: create">
+          <h3 class="py-4" id="featureTitle">Suggest Feature</h3>
+            <form data-bind="submit: save">
               <div class="form-group row">
                 <label for="inputTitle" class="col-sm-2 col-form-label">Title *</label>
                 <div class="col-sm-10">
@@ -121,7 +140,7 @@
               <div class="form-group row">
                 <label for="inputPriority" class="col-sm-2 col-form-label">Priority *</label>
                 <div class="col-sm-10">
-                  <input type="number" min="1" class="form-control" id="inputPriority" placeholder="Priority" name="priority" data-bind="value: priority">
+                  <input type="number" min="1" class="form-control" id="inputPriority" placeholder="##" name="priority" data-bind="value: priority">
                 </div>
               </div>
               <div class="form-group row">
@@ -146,7 +165,9 @@
               </div>
               <div class="form-group row">
                 <div class="col-sm-12">
+                  <input type="hidden" id="hiddenId" name="id" data-bind="value: id">
                   <button id="saveButton" type="submit" class="btn btn-primary">Save Suggestion</button>
+                  <button id="cancelButton" type="reset" class="btn btn-outline-primary" data-bind="click: hide">Cancel</button>
                 </div>
               </div>
             </form>
@@ -168,12 +189,14 @@
     </footer>
  
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
-    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha384-fJU6sGmyn07b+uD1nMk7/iSb4yvaowcueiQhfVgQuD98rfva8mcr1eSvjchfpMrH" crossorigin="anonymous"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js" integrity="sha384-B1miHxuCmAMGc0405Cm/zSXCc38EP5hNOy2bblqF6yiX01Svinm1mWMwJDdNDBGr" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js" crossorigin="anonymous"></script> 
-    <script src="{{url_for('static', filename='moment.min.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js" integrity="sha384-/EjRuG6YTb6zCFou+DBnYCi5u9E1RjUMJanyGOL7DUYLp6wSCUuHNhd58uoGj7jh" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" integrity="sha384-rgWRqC0OFPisxlUvl332tiM/qmaNxnlY46eksSZD84t+s2vZlqGeHrncwIRX7CGp" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js" integrity="sha384-uiSTMvD1kcI19sAHJDVf68medP9HA2E2PzGis9Efmfsdb8p9+mvbQNgFhzii1MEX" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.js" integrity="sha384-rCWDlX0ts8DR19RqjyA5Pi/rsyO1CtL0u3FwkCX9+shkYbnKVIkXceW5FARgCH6T" crossorigin="anonymous"></script>
     <script src="{{url_for('static', filename='main.js')}}"></script>
   </body>
 </html>

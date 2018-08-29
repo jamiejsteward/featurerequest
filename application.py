@@ -32,31 +32,64 @@ class Feature(db.Model):
     def __repr__(self):
         return '<Feature %r>' % self.title
 
+def init_db():
+    with application.app_context():
+        db.create_all()
+
 @application.route("/")
 def main():
     return render_template('features.html')
 
-@application.route('/features', methods=['GET'])
-def getFeatures():
-    entries = []
-    features = Feature.query.order_by('priority').all()
-    for u in features:
-        entries.append(u.as_dict())
-    return jsonify(features=entries )
+@application.route('/features/', defaults={'feature_id': None}, methods=['GET'])
+@application.route('/features/<int:feature_id>', methods=['GET'])
+def get_feature(feature_id):
+    if feature_id:
+        entries = []
+        features = Feature.query.filter_by(id=feature_id)
+        for u in features:
+            entries.append(u.as_dict())
+        return jsonify(features=entries )
+    else: 
+        entries = []
+        features = Feature.query.order_by('priority').all()
+        for u in features:
+            entries.append(u.as_dict())
+        return jsonify(features=entries )
 
 @application.route('/features', methods=['POST'])
-def createFeature():
+def save_feature():
     # read the posted values from the UI
+    id = request.form['id']
+    if id == '':
+        id = None
     title = request.form['title']
     description = request.form['description']
     client = request.form['client']
     priority = int(request.form['priority'])
-    target = datetime.strptime(request.form['target'], '%Y-%m-%d')
+    rawTarget = request.form['target']
+    target = datetime.strptime(rawTarget, '%Y-%m-%d')
     area = request.form['area']
- 
+
     # validate the received values
-    if title:
-        new_feature  = Feature(
+    if id:
+        with db.session.no_autoflush:
+            edit_feature = Feature.query.filter_by(id=id).first()
+            if edit_feature is None:
+                return json.dumps({'html':'<span>Item not found to update.</span>'})
+            edit_feature.title=title
+            edit_feature.description=description
+            edit_feature.priority=priority
+            edit_feature.target_date=target
+            edit_feature.client=client
+            edit_feature.product_area=area
+            update_priority(client,priority)
+            db.session.commit()
+            return json.dumps({'html':'<span>All good</span>'})
+
+    # validate the received values
+    elif title:
+        new_feature = Feature(
+            id=id,
             title=title,
             description=description,
             priority=priority,
@@ -65,8 +98,15 @@ def createFeature():
             product_area=area
         )
         db.session.add(new_feature)
+        update_priority(client,priority)
+        db.session.commit()
+        return json.dumps({'html':'<span>All good</span>'})
+    else:
+        return json.dumps({'html':'<span>Enter the required fields</span>'})
 
-        # two features cannot have the same priority, re-order if same priority is added
+# two features cannot have the same priority, re-order if same priority is added
+def update_priority(client,priority):
+    with db.session.no_autoflush:
         priority_to_update = priority
         features_to_update_count = Feature.query.filter_by(client=client, priority=priority_to_update).count()
         while features_to_update_count > 1:
@@ -75,13 +115,8 @@ def createFeature():
             priority_to_update = priority_to_update + 1
             features_to_update_count = Feature.query.filter_by(client=client, priority=priority_to_update).count()
 
-        db.session.commit()
-        return json.dumps({'html':'<span>All good</span>'})
-    else:
-        return json.dumps({'html':'<span>Enter the required fields</span>'})
-
 @application.route('/features/<int:feature_id>', methods=['DELETE'])
-def deleteFeature(feature_id):
+def delete_feature(feature_id):
     if feature_id:
         feature_to_delete = Feature.query.get(feature_id)
         db.session.delete(feature_to_delete)
@@ -91,5 +126,5 @@ def deleteFeature(feature_id):
         return json.dumps({'html':'<span>Enter the required fields</span>'})
 
 if __name__ == "__main__":
+    init_db()
     application.run()
-    db.create_all()
