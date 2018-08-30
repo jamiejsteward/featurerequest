@@ -73,11 +73,11 @@
             <table id="featuresTable" class="table table-hover table-striped table-bordered table-sm">
               <thead>
                 <tr>
-                  <th scope="col" class="sortable" data-bind="click: sort.bind($data, 'title'), css: {'asc': sortBy() == 'asc', 'desc': sortBy() == 'desc' }">Title</th>
-                  <th scope="col" class="sortable" data-bind="click: sort.bind($data, 'client'), css: {'asc': sortBy() == 'asc', 'desc': sortBy() == 'desc' }">Client</th>
-                  <th scope="col"  class="sortable" data-bind="click: sort.bind($data, 'priority'), css: {'asc': sortBy() == 'asc', 'desc': sortBy() == 'desc' }">Priority</th>
-                  <th scope="col"  class="sortable" data-bind="click: sort.bind($data, 'target_date'), css: {'asc': sortBy() == 'asc', 'desc': sortBy() == 'desc' }">Target Date</th>
-                  <th scope="col"  class="sortable" data-bind="click: sort.bind($data, 'product_area'), css: {'asc': sortBy() == 'asc', 'desc': sortBy() == 'desc' }">Product Area</th>
+                  <th scope="col" class="sort" data-bind="click: sort.bind($data, 'title'), css: sortStyle('title')">Title</th>
+                  <th scope="col" class="sort" data-bind="click: sort.bind($data, 'client'), css: sortStyle('client')">Client</th>
+                  <th scope="col" class="sort" data-bind="click: sort.bind($data, 'priority'), css: sortStyle('priority')">Priority</th>
+                  <th scope="col" class="sort" data-bind="click: sort.bind($data, 'target_date'), css: sortStyle('target_date')">Target Date</th>
+                  <th scope="col" class="sort" data-bind="click: sort.bind($data, 'product_area'), css: sortStyle('product_area')">Product Area</th>
                   <th></th>
                 </tr>
               </thead>

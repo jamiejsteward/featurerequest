@@ -6,6 +6,39 @@ small {
   color: #a4a2a2;
 }
 
-.clickable-icon:hover, .sortable {
+.clickable-icon:hover, .sort {
   cursor: pointer;
 }
+
+.sort {
+  padding-right: 18px;
+  position: relative;
+}
+
+.sort:after {
+  border: 4px solid transparent;
+  /*border-top-color: #666;*/
+  margin-top: 1px;
+  font-family: Font Awesome\ 5 Free;
+  content: "\f0dc";
+  display: block;
+  height: 0;
+  right: 10px;
+  top: 0px;
+  position: absolute;
+  width: 0;
+}
+
+.sort:before {
+  border-bottom-color: #666; 
+  margin-top: -9px;
+}
+.asc:after {
+  /*border-top: 5px solid #fff; */
+  content: "\f0de";
+}
+.desc:after {
+  /*border-bottom: 5px solid #fff;*/
+  content: "\f0dd";
+}
+

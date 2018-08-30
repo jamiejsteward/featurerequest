@@ -13,7 +13,8 @@ function Feature(data) {
 
 var featureModel = {
     features : ko.observableArray([]),
-    sortBy : ko.observable('asc'),
+    sortBy : ko.observable('priority'),
+    sortDir : ko.observable('asc'),
     id : ko.observable(""),
     title : ko.observable(""),
     description : ko.observable(""),
@@ -117,19 +118,30 @@ var featureModel = {
         featureModel.features.valueHasMutated();
     },
     sort: function(order) {
-        sortBy = ko.unwrap(featureModel.sortBy());
-        if (sortBy=='asc') {
-            featureModel.sortBy('desc') 
+        featureModel.sortBy(order);
+        sortDir = ko.unwrap(featureModel.sortDir);
+        if (sortDir=='asc') {
+            sortDir = 'desc';
         } else {
-            featureModel.sortBy('asc')
+            sortDir = 'asc';
         }
-        $.getJSON('/features?order='+order+'&dir='+sortBy, function(obj) {
+        featureModel.sortDir(sortDir)
+        $.getJSON('/features?order='+order+'&dir='+sortDir, function(obj) {
             var t = $.map(obj.features, function(item) {
                 return new Feature(item);
             });
             featureModel.features(t);
         }); 
         featureModel.features.valueHasMutated();
+    },
+    sortStyle(order) {
+        sortBy = ko.unwrap(featureModel.sortBy);
+        sortDir = ko.unwrap(featureModel.sortDir);
+        if (sortBy!= order) {
+            return "";
+        } else {
+            return sortDir;
+        }
     }
 };
 
