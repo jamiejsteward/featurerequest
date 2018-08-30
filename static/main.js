@@ -1,3 +1,6 @@
+var featureData = {"features":[{"client":"A","description":"","id":22,"priority":1,"product_area":"Policies","target_date":"Fri, 28 Sep 2018 00:00:00 GMT","title":"Mega New Feature 3 !!!"},{"client":"C","description":"","id":4,"priority":2,"product_area":"Policies","target_date":"Sat, 29 Sep 2018 00:00:00 GMT","title":"Different Client C"},{"client":"A","description":"Trigger Communication Events","id":16,"priority":2,"product_area":"Reports","target_date":"Thu, 30 Aug 2018 00:00:00 GMT","title":"Mega New Feature !!!"},{"client":"B","description":"","id":18,"priority":4,"product_area":"Claims","target_date":"Fri, 28 Sep 2018 00:00:00 GMT","title":"Some Extra Function 2"}]}
+
+
 function Feature(data) {
     this.id = data.id;
     this.title = data.title;
@@ -6,19 +9,11 @@ function Feature(data) {
     this.area = data.product_area;
     this.priority = data.priority;
     this.target = data.target_date;
-    /*
-    this.id = ko.observable(data.id);
-    this.title = ko.observable(data.title);
-    this.description = ko.observable(data.description);
-    this.client = ko.observable(data.client);
-    this.area = ko.observable(data.product_area);
-    this.priority = ko.observable(data.priority);
-    this.target = ko.observable(data.target_date);
-    */
 }
 
 var featureModel = {
     features : ko.observableArray([]),
+    sortBy : ko.observable('asc'),
     id : ko.observable(""),
     title : ko.observable(""),
     description : ko.observable(""),
@@ -37,7 +32,7 @@ var featureModel = {
         {name: "Reports", id: "Reports"}
     ],
     selectedArea : ko.observable('policy'),
-    edit: function(data) {
+    load: function(data) {
         $('#hiddenId').val(data.id);
         $('#inputTitle').val(data.title);
         $('#inputDescription').val(data.description);
@@ -120,10 +115,25 @@ var featureModel = {
             featureModel.features(t);
         }); 
         featureModel.features.valueHasMutated();
+    },
+    sort: function(order) {
+        sortBy = ko.unwrap(featureModel.sortBy());
+        if (sortBy=='asc') {
+            featureModel.sortBy('desc') 
+        } else {
+            featureModel.sortBy('asc')
+        }
+        $.getJSON('/features?order='+order+'&dir='+sortBy, function(obj) {
+            var t = $.map(obj.features, function(item) {
+                return new Feature(item);
+            });
+            featureModel.features(t);
+        }); 
+        featureModel.features.valueHasMutated();
     }
 };
 
 $(function() {
-    ko.applyBindings(featureModel);
     featureModel.refresh();
+    ko.applyBindings(featureModel);
 });

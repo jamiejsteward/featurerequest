@@ -6,7 +6,7 @@ from datetime import datetime
 SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/test2.db'
 
 ## Edit the URI below to add your MySQL database RDS credentials and your AWS URL
-## SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://(user):(password)@(db_endpoint)/(db_name)'
+# SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://RDS_USERNAME:RDS_PASSWORD@RDS_HOSTNAME:RDS_PORT/RDS_DB_NAME'
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 WTF_CSRF_ENABLED = True
@@ -43,6 +43,8 @@ def main():
 @application.route('/features/', defaults={'feature_id': None}, methods=['GET'])
 @application.route('/features/<int:feature_id>', methods=['GET'])
 def get_feature(feature_id):
+    order = request.args.get('order', default = 'priority', type = str)
+    dir = request.args.get('dir', default = 'asc', type = str)
     if feature_id:
         entries = []
         features = Feature.query.filter_by(id=feature_id)
@@ -51,7 +53,7 @@ def get_feature(feature_id):
         return jsonify(features=entries )
     else: 
         entries = []
-        features = Feature.query.order_by('priority').all()
+        features = Feature.query.order_by(order+' '+dir).all()
         for u in features:
             entries.append(u.as_dict())
         return jsonify(features=entries )
