@@ -72,21 +72,20 @@ def save_feature():
     target = datetime.strptime(rawTarget, '%Y-%m-%d')
     area = request.form['area']
 
-    # validate the received values
+    # validate the received identifier
     if id:
-        with db.session.no_autoflush:
-            edit_feature = Feature.query.filter_by(id=id).first()
-            if edit_feature is None:
-                return json.dumps({'html':'<span>Item not found to update.</span>'})
-            edit_feature.title=title
-            edit_feature.description=description
-            edit_feature.priority=priority
-            edit_feature.target_date=target
-            edit_feature.client=client
-            edit_feature.product_area=area
-            update_priority(client,priority)
-            db.session.commit()
-            return json.dumps({'html':'<span>All good</span>'})
+        edit_feature = Feature.query.filter_by(id=id).first()
+        if edit_feature is None:
+            return json.dumps({'html':'<span>Item not found to update.</span>'})
+        edit_feature.title=title
+        edit_feature.description=description
+        edit_feature.priority=priority
+        edit_feature.target_date=target
+        edit_feature.client=client
+        edit_feature.product_area=area
+        update_priority(client,priority)
+        db.session.commit()
+        return json.dumps({'html':'<span>All good</span>'})
 
     # validate the received values
     elif title:
@@ -108,14 +107,13 @@ def save_feature():
 
 # two features cannot have the same priority, re-order if same priority is added
 def update_priority(client,priority):
-    with db.session.no_autoflush:
-        priority_to_update = priority
+    priority_to_update = priority
+    features_to_update_count = Feature.query.filter_by(client=client, priority=priority_to_update).count()
+    while features_to_update_count > 1:
+        feature_to_update = Feature.query.filter_by(client=client, priority=priority_to_update).order_by('id').first()
+        feature_to_update.priority = feature_to_update.priority + 1
+        priority_to_update = priority_to_update + 1
         features_to_update_count = Feature.query.filter_by(client=client, priority=priority_to_update).count()
-        while features_to_update_count > 1:
-            feature_to_update = Feature.query.filter_by(client=client, priority=priority_to_update).order_by('id').first()
-            feature_to_update.priority = feature_to_update.priority + 1
-            priority_to_update = priority_to_update + 1
-            features_to_update_count = Feature.query.filter_by(client=client, priority=priority_to_update).count()
 
 @application.route('/features/<int:feature_id>', methods=['DELETE'])
 def delete_feature(feature_id):
