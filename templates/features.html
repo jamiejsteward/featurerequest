@@ -89,8 +89,8 @@
                   <td><span data-bind="text: moment(target).format('LL')" /></td>
                   <td><span data-bind="text: area" /></td>
                   <td>
-                    <a class="clickable-icon" data-bind="click: $parent.load"><i class="fas fa-edit"></i></a>
-                    <a class="clickable-icon" data-bind="click: $parent.delete"><i class="fas fa-trash-alt"></i></a>
+                    <a id="editButton" class="clickable-icon" data-bind="click: $parent.load"><i class="fas fa-edit"></i></a>
+                    <a id="deleteButton" class="clickable-icon" data-bind="click: $parent.delete"><i class="fas fa-trash-alt"></i></a>
                   </td>
                 </tr>
               </tbody>

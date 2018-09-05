@@ -3,7 +3,7 @@ import unittest
 
 class FlaskTestCase(unittest.TestCase):
 
-  def test_create_feature(self):
+  def test_rest_create_feature(self):
     tester = application.test_client(self)
     response = tester.post(
       '/features',
@@ -19,7 +19,7 @@ class FlaskTestCase(unittest.TestCase):
       )
     self.assertIn(b'All good', response.data)
 
-  def test_update_feature(self):
+  def test_rest_update_feature(self):
     tester = application.test_client(self)
     response = tester.post(
       '/features',
@@ -35,7 +35,7 @@ class FlaskTestCase(unittest.TestCase):
       )
     self.assertIn(b'All good', response.data)
 
-  def test_get_feature(self):
+  def test_rest_get_feature(self):
     tester = application.test_client(self)
     response = tester.get('/features/')
     self.assertIn(b'description', response.data)

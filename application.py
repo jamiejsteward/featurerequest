@@ -36,6 +36,11 @@ def init_db():
     with application.app_context():
         db.create_all()
 
+def create_app(config_name):
+    application = Flask(__name__, instance_relative_config=True)
+    application.config.from_object(__name__)
+    return application
+
 @application.route("/")
 def main():
     return render_template('features.html')
