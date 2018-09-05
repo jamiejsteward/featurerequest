@@ -22,14 +22,14 @@ are:
 ## Tech Stack
 This project was built using the following:
 
-* Browser Scripting: KnockoutJS
-* Browser Framework: Bootstrap 
-* Browser Testing: Selenium
-* Server Scripting: Python 3.5
-* Server Framework: Flask
-* Server Testing: unittest
-* Database Mapping: Sql-Alchemy
-* Database Server: MySQL
+* **Browser Scripting:** KnockoutJS
+* **Browser Framework:** Bootstrap 
+* **Browser Testing:** Selenium
+* **Server Scripting:** Python 3.5
+* **Server Framework:** Flask
+* **Server Testing:** unittest
+* **Database Mapping:** Sql-Alchemy
+* **Database Server:** MySQL
 
 ## Getting Started
 
@@ -39,7 +39,7 @@ These instructions will give you a local repository on your machine which you ca
 
 By default the app uses SQLlite locally, you can update the **SQLALCHEMY_DATABASE_URI** variable to point at your MySQL database.
 
-The application utilizes MVVC architecture; HTML tables, fields and buttons are bound to KnockoutJS objects, which call REST endpoints served up via Flask:  [Sortable Features Resource](http://flask-env.ixduwmwhpm.us-east-2.elasticbeanstalk.com/?order=client&dir=desc)
+The application utilizes MVVC architecture; HTML tables, fields and buttons are bound to KnockoutJS objects, which call REST endpoints served up via Flask:  [Sortable Resource](http://flask-env.ixduwmwhpm.us-east-2.elasticbeanstalk.com/features/?order=client&dir=desc)
 
 ```
 git clone git@github.com:jamiejsteward/featurerequest.git
