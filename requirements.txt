@@ -87,7 +87,7 @@ python-dateutil==2.7.3
 pytz==2013.7
 PyYAML==3.13
 requests==2.18.4
-rsa==3.4.2
+rsa==4.1
 s3transfer==0.1.13
 scipy==0.13.0b1
 selenium==3.14.0
